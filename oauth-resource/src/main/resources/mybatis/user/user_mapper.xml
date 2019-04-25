@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.happylifeplat.security.mapper.user.UserMapper">
+
+    <!--用户名查询用户-->
+    <select id="selectByUsername" resultType="com.happylifeplat.security.model.User">
+        SELECT id, username AS `name`, `password`, phone, email, image_url, is_locked_out, is_disable FROM `user` WHERE username = #{username}
+    </select>
+</mapper>

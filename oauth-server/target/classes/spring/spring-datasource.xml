@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <description>data source, mybatis transaction 配置</description>
+
+    <!-- ==============================================oauth data source set============================================== -->
+    <!-- 数据源配置, 使用 Druid 数据库连接池 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close" primary="true">
+        <!--<property name="name" value="${jdbc.dataSourceName}"/>-->
+        <property name="driverClassName" value="${oauth.jdbc.driverClass}"/>
+        <property name="url" value="${oauth.jdbc.url}"/>
+        <property name="username" value="${oauth.jdbc.username}"/>
+        <property name="password" value="${oauth.jdbc.password}"/>
+        <property name="filters" value="${oauth.druid.filters}"/>
+        <property name="connectionProperties" value="config.decrypt=true;config.decrypt.key=${oauth.jdbc.publicKey}"/>
+
+        <!-- 配置连接池初始化大小、最大、最小、最大等待时间 -->
+        <property name="initialSize" value="${oauth.druid.initialSize}"/>
+        <property name="maxActive" value="${oauth.druid.maxActive}"/>
+        <property name="minIdle" value="${oauth.druid.minIdle}"/>
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="${oauth.druid.maxWait}"/>
+
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <!--在mysql5.5以下的版本中没有PSCache功能，建议关闭掉。5.5及以上版本有PSCache，建议开启。-->
+        <property name="poolPreparedStatements" value="${oauth.druid.poolPreparedStatements}"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize"
+                  value="${oauth.druid.maxPoolPreparedStatementPerConnectionSize}"/>
+        <property name="maxOpenPreparedStatements" value="${oauth.druid.maxOpenPreparedStatements}"/>
+
+        <property name="validationQuery" value="${oauth.druid.validationQuery}"/>
+        <property name="testOnBorrow" value="${oauth.druid.testOnBorrow}"/>
+        <property name="testOnReturn" value="${oauth.druid.testOnReturn}"/>
+        <property name="testWhileIdle" value="${oauth.druid.testWhileIdle}"/>
+
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${oauth.druid.timeBetweenEvictionRunsMillis}"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${oauth.druid.minEvictableIdleTimeMillis}"/>
+
+        <!-- 打开removeAbandoned功能 -->
+        <property name="removeAbandoned" value="${oauth.druid.removeAbandoned}"/>
+        <!-- 1800秒，也就是30分钟,超过30分钟,连接会自动关闭 -->
+        <property name="removeAbandonedTimeout" value="${oauth.druid.removeAbandonedTimeout}"/>
+        <!-- abanded连接时输出错误日志 -->
+        <property name="logAbandoned" value="${oauth.druid.logAbandoned}"/>
+
+        <property name="timeBetweenLogStatsMillis" value="${oauth.druid.timeBetweenLogStatsMillis}"/>
+        <property name="proxyFilters">
+            <list>
+                <ref bean="stat-filter"/>
+                <ref bean="wall-filter"/>
+                <ref bean="log-filter"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+        <property name="slowSqlMillis" value="30000"/>
+        <property name="logSlowSql" value="true"/>
+        <property name="mergeSql" value="true"/>
+        <property name="dbType" value="mysql"/>
+    </bean>
+    <bean id="wall-filter" class="com.alibaba.druid.wall.WallFilter">
+        <property name="dbType" value="mysql"/>
+    </bean>
+
+    <bean id="log-filter" class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
+        <property name="resultSetLogEnabled" value="true"/>
+    </bean>
+
+    <!-- ==============================================user data source set============================================== -->
+    <!-- 数据源配置, 使用 Druid 数据库连接池 -->
+    <bean id="userDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!--<property name="name" value="${jdbc.dataSourceName}"/>-->
+        <property name="driverClassName" value="${user.jdbc.driverClass}"/>
+        <property name="url" value="${user.jdbc.url}"/>
+        <property name="username" value="${user.jdbc.username}"/>
+        <property name="password" value="${user.jdbc.password}"/>
+        <property name="filters" value="${user.druid.filters}"/>
+        <property name="connectionProperties" value="config.decrypt=true;config.decrypt.key=${user.jdbc.publicKey}"/>
+
+        <!-- 配置连接池初始化大小、最大、最小、最大等待时间 -->
+        <property name="initialSize" value="${user.druid.initialSize}"/>
+        <property name="maxActive" value="${user.druid.maxActive}"/>
+        <property name="minIdle" value="${user.druid.minIdle}"/>
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="${user.druid.maxWait}"/>
+
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <!--在mysql5.5以下的版本中没有PSCache功能，建议关闭掉。5.5及以上版本有PSCache，建议开启。-->
+        <property name="poolPreparedStatements" value="${user.druid.poolPreparedStatements}"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize"
+                  value="${user.druid.maxPoolPreparedStatementPerConnectionSize}"/>
+        <property name="maxOpenPreparedStatements" value="${user.druid.maxOpenPreparedStatements}"/>
+
+        <property name="validationQuery" value="${user.druid.validationQuery}"/>
+        <property name="testOnBorrow" value="${user.druid.testOnBorrow}"/>
+        <property name="testOnReturn" value="${user.druid.testOnReturn}"/>
+        <property name="testWhileIdle" value="${user.druid.testWhileIdle}"/>
+
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${user.druid.timeBetweenEvictionRunsMillis}"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${user.druid.minEvictableIdleTimeMillis}"/>
+
+        <!-- 打开removeAbandoned功能 -->
+        <property name="removeAbandoned" value="${user.druid.removeAbandoned}"/>
+        <!-- 1800秒，也就是30分钟,超过30分钟,连接会自动关闭 -->
+        <property name="removeAbandonedTimeout" value="${user.druid.removeAbandonedTimeout}"/>
+        <!-- abanded连接时输出错误日志 -->
+        <property name="logAbandoned" value="${user.druid.logAbandoned}"/>
+
+        <property name="timeBetweenLogStatsMillis" value="${user.druid.timeBetweenLogStatsMillis}"/>
+        <property name="proxyFilters">
+            <list>
+                <ref bean="user-stat-filter"/>
+                <ref bean="user-wall-filter"/>
+                <ref bean="user-log-filter"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="user-stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+        <property name="slowSqlMillis" value="30000"/>
+        <property name="logSlowSql" value="true"/>
+        <property name="mergeSql" value="true"/>
+        <property name="dbType" value="mysql"/>
+    </bean>
+    <bean id="user-wall-filter" class="com.alibaba.druid.wall.WallFilter">
+        <property name="dbType" value="mysql"/>
+    </bean>
+
+    <bean id="user-log-filter" class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
+        <property name="resultSetLogEnabled" value="true"/>
+    </bean>
+
+    <bean id="userSqlSessionFactory" name="userSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="userDataSource"/>
+        <property name="configLocation" value="classpath:mybatis/user/mybatis-config.xml"/>
+        <property name="mapperLocations" value="classpath*:mybatis/user/**/*_mapper.xml"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer" primary="true">
+        <property name="basePackage" value="com.happylifeplat.security.mapper.user"/>
+        <property name="sqlSessionFactoryBeanName" value="userSqlSessionFactory"/>
+    </bean>
+
+    <bean id="userTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="userDataSource"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="userTransactionManager" proxy-target-class="true"/>
+</beans>

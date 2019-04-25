@@ -1,0 +1,28 @@
+# Server settings
+server:
+  port: 29999
+  contextPath: /oauth-server
+
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+  mvc:
+    view:
+      prefix: /templates/
+      suffix: .ftl
+
+security:
+  basic:
+    enabled: false
+  sessions: stateless
+
+# LOGGER
+logging:
+  level:
+    root: info
+    org.springframework.security: info
+    com.happylifeplat.security: info
+  path: "./logs"
+  file: "oauth-server.log"

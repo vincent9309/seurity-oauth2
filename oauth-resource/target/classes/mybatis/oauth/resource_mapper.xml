@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.happylifeplat.security.mapper.oauth.ResourceMapper">
+
+    <!--添加资源-->
+    <insert id="add" parameterType="com.happylifeplat.security.model.Resource">
+        INSERT INTO oauth_resource
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                id,
+            </if>
+            <if test="name != null and name != ''">
+                `name`,
+            </if>
+            <if test="alias != null and alias != ''">
+                alias,
+            </if>
+            <if test="describe != null and describe != ''">
+                `describe`,
+            </if>
+            <if test="disabled != null">
+                disabled,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                #{id},
+            </if>
+            <if test="name != null and name != ''">
+                #{name},
+            </if>
+            <if test="alias != null and alias != ''">
+                #{alias},
+            </if>
+            <if test="describe != null and describe != ''">
+                #{describe},
+            </if>
+            <if test="disabled != null">
+                #{disabled},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+        </trim>
+    </insert>
+
+    <!--通过别名查询资源-->
+    <select id="selectByName" resultType="com.happylifeplat.security.model.Resource">
+        SELECT id, `name`, alias, `describe`, disabled, update_time, create_time
+        FROM oauth_resource
+        WHERE disabled = 0 AND `name` = #{name} LIMIT 1
+    </select>
+
+    <!--通过资源ID查询资源-->
+    <select id="selectById" resultType="com.happylifeplat.security.model.Resource">
+        SELECT id, `name`, alias, `describe`, disabled, update_time, create_time
+        FROM oauth_resource
+        WHERE id = #{resourceId}
+    </select>
+
+    <!--条件查询资源-->
+    <select id="selectByCondition" resultType="com.happylifeplat.security.model.Resource">
+        SELECT id, `name`, alias, `describe`, disabled, update_time, create_time
+        FROM oauth_resource
+        WHERE disabled = 0
+        <if test="id != null and id != ''">
+            AND id = #{id}
+        </if>
+        <if test="name != null and name != ''">
+            AND `name` = #{name}
+        </if>
+        <if test="alias != null and alias != ''">
+            AND alias LIKE  CONCAT('%', CONCAT(#{alias}, '%'))
+        </if>
+        <if test="describe != null and describe != ''">
+            AND `describe` LIKE  CONCAT('%', CONCAT(#{describe}, '%'))
+        </if>
+        ORDER BY update_time DESC
+    </select>
+
+    <!--通过资源ID删除资源-->
+    <delete id="delete" parameterType="string">
+        UPDATE oauth_resource SET disabled = 1 WHERE id = #{resourceId}
+    </delete>
+</mapper>

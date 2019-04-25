@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.happylifeplat.security.mapper.oauth.ClientDetailsMapper">
+
+    <resultMap id="oauthClientDetails" type="com.happylifeplat.security.model.OauthClientDetails">
+        <id property="clientId" column="client_id"/>
+        <result property="name" column="name"/>
+        <result property="clientSecret" column="client_secret"/>
+        <result property="resourceIds" column="resource_ids" typeHandler="com.happylifeplat.security.common.SetTypeHandler"/>
+        <result property="scope" column="scope" typeHandler="com.happylifeplat.security.common.SetTypeHandler"/>
+        <result property="authorizedGrantTypes" column="authorized_grant_types" typeHandler="com.happylifeplat.security.common.SetTypeHandler"/>
+        <result property="webServerRedirectUri" column="web_server_redirect_uri" typeHandler="com.happylifeplat.security.common.SetTypeHandler"/>
+        <result property="authorities" column="authorities" typeHandler="com.happylifeplat.security.common.SetTypeHandler"/>
+        <result property="accessTokenValidity" column="access_token_validity"/>
+        <result property="refreshTokenValidity" column="refresh_token_validity"/>
+        <result property="additionalInformation" column="additional_information"/>
+        <result property="autoapprove" column="autoapprove" typeHandler="com.happylifeplat.security.common.SetTypeHandler"/>
+    </resultMap>
+
+    <!--插入客户端信息-->
+    <insert id="insert" parameterType="com.happylifeplat.security.model.Client">
+        INSERT INTO oauth_client
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                id,
+            </if>
+            <if test="name != null and name != ''">
+                `name`,
+            </if>
+            <if test="disabled != null">
+                disabled,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                #{id},
+            </if>
+            <if test="name != null and name != ''">
+                #{name},
+            </if>
+            <if test="disabled != null">
+                #{disabled},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+        </trim>
+    </insert>
+
+    <!--通过客户端ID查询客户端-->
+    <select id="selectById" resultMap="oauthClientDetails">
+        SELECT cd.client_id, c.name, '***' AS client_secret, cd.resource_ids, cd.scope, cd.authorized_grant_types, cd.web_server_redirect_uri,
+                cd.authorities, cd.access_token_validity, cd.refresh_token_validity, cd.additional_information, cd.autoapprove
+        FROM oauth_client_details cd
+        LEFT JOIN oauth_client c ON cd.client_id = c.id
+        WHERE cd.client_id = #{clientId}
+    </select>
+
+    <!--查询客户端-->
+    <select id="selectList" resultMap="oauthClientDetails">
+        SELECT cd.client_id, c.name, '***' AS client_secret, cd.resource_ids, cd.scope, cd.authorized_grant_types, cd.web_server_redirect_uri,
+                cd.authorities, cd.access_token_validity, cd.refresh_token_validity, cd.additional_information, cd.autoapprove
+        FROM oauth_client_details cd
+        LEFT JOIN oauth_client c ON cd.client_id = c.id
+        WHERE 1=1
+        <if test="id != null and id != ''">
+            AND cd.client_id = #{id}
+        </if>
+        <if test="name != null and name != ''">
+            AND c.name LIKE  CONCAT('%', CONCAT(#{name}, '%'))
+        </if>
+        ORDER BY update_time DESC
+    </select>
+
+    <!--更新客户端-->
+    <update id="update" parameterType="com.happylifeplat.security.model.Client">
+        UPDATE oauth_client
+        <set>
+            <if test="name != null and name != ''">
+                `name` = #{name},
+            </if>
+            <if test="disabled != null">
+                disabled = #{disabled},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime},
+            </if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <!--删除客户端-->
+    <delete id="delete" parameterType="string">
+        DELETE FROM oauth_client WHERE id = #{clientId}
+    </delete>
+</mapper>

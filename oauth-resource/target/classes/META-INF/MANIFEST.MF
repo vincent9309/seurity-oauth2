@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Title: oauth-resource
+Implementation-Version: 1.0.1-RELEASE
+Built-By: vincent
+Implementation-Vendor-Id: com.happylifeplat
+Build-Jdk: 1.8.0_91
+Implementation-URL: http://www.happylifeplat.com/security/oauth-resour
+ ce
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+

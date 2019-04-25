@@ -1,0 +1,28 @@
+# Server settings
+server:
+  port: 29998
+  contextPath: /resource-server
+
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+
+security:
+  basic:
+    enabled: false
+  sessions: stateless
+  oauth2:
+    resource:
+      token-info-uri: https://development.wang-guanjia.com/oauth-server/oauth/check_token
+
+
+# LOGGER
+logging:
+  level:
+    root: info
+    org.springframework.security: debug
+    com.happylifeplat.security: debug
+  path: "./logs"
+  file: "oauth-resource.log"

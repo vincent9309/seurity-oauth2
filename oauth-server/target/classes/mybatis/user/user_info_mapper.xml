@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.happylifeplat.security.mapper.user.UserInfoMapper">
+
+    <!--用户名查询用户-->
+    <select id="selectByUsername" resultType="com.happylifeplat.security.model.User">
+        SELECT id, username AS `name`, `password`, phone, email, image_url, is_locked_out, is_disable FROM `user` WHERE username = #{username}
+        and is_disable = 0
+        LIMIT 0,1 
+    </select>
+
+    <!--通过用户ID查询用户是否为业主（消费者）-->
+    <select id="isOwn" resultType="boolean">
+        SELECT COUNT(*) FROM `owner` WHERE id = #{userId}
+    </select>
+
+    <!--通过用户ID查询用户是否为供应商-->
+    <select id="isProvider" resultType="boolean">
+        SELECT COUNT(*) FROM service_provider WHERE id = #{userId}
+    </select>
+</mapper>

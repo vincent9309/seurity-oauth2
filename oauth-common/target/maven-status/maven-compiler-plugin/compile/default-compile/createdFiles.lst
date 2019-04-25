@@ -1,0 +1,15 @@
+com\happylifeplat\security\common\GuidGenerator.class
+com\happylifeplat\security\common\WGJPasswordEncoder.class
+com\happylifeplat\security\model\UserInfo.class
+com\happylifeplat\security\util\DateUtils$DateFormatType.class
+com\happylifeplat\security\model\Role.class
+com\happylifeplat\security\common\JsonValidator.class
+com\happylifeplat\security\common\EnumView.class
+com\happylifeplat\security\common\SetTypeHandler.class
+com\happylifeplat\security\model\Authorities.class
+com\happylifeplat\security\util\DateUtils.class
+com\happylifeplat\security\common\EnumSerializer.class
+com\happylifeplat\security\util\JsonUtils.class
+com\happylifeplat\security\common\EntityView.class
+com\happylifeplat\security\model\User.class
+com\happylifeplat\security\common\StringUnicodeSerializer.class
